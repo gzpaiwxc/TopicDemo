@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_circle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    >
+
+    <TextView
+        android:id="@+id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/circle_blue"
+        android:gravity="center"
+        android:text="1"
+        android:textColor="@color/white"
+        android:textSize="16sp"/>
+
+
+    <TextView
+        android:id="@+id/textA"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/circle_blue"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/textB"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/circle_blue"
+        android:gravity="center"
+        android:text="B"
+        android:textColor="#fff"
+        android:textSize="16sp"
+        />
+    <TextView
+        android:id="@+id/textC"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/circle_rim_blue"
+        android:gravity="center"
+        android:text="C"
+        android:textColor="@color/bg_blue_color"
+        android:textSize="18sp"
+        />
+
+
+</LinearLayout>

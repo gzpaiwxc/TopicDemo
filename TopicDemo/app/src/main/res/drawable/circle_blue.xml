@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+       android:shape="oval">
+
+    <!--设置填充颜色-->
+    <solid android:color="@color/bg_blue_color"/>
+    <!--设置大小-->
+    <size
+        android:width="35dp"
+        android:height="35dp"/>
+    <!--设置边框的颜色-->
+    <stroke
+        android:color="@color/white"
+        />
+
+
+</shape>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+
+    <!--白色-->
+    <color name="white">#ffffff</color>
+    <!--灰黑-->
+    <color name="word_text_color">#3d433f</color>
+    <!--黄色-->
+    <color name="bg_yellow_color">#ffefb1</color>
+    <!--玫红-->
+    <color name="bg_red_color">#f66548</color>
+    <!--绿色-->
+    <color name="bg_green_color">#65c325</color>
+    <!--蓝色-->
+    <color name="bg_blue_color">#68b6f2</color>
+    <!--浅绿色-->
+    <color name="bg_aqua_color">#C0EDFF</color>
+    <!--灰色-->
+    <color name="gray">#F5F5F5</color>
+    <!--红色-->
+    <color name="red">#f94242</color>
+
+
+</resources>
