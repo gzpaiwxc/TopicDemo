@@ -149,6 +149,10 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
             case R.id.img_sink:
                 if (!isSink) {
                     rlSelectOption.setVisibility(View.GONE);
+                    for (int i=0;i<optionAnswers.size();i++) {
+                        optionAnswers.get(i).setClick(false);
+                    }
+                    optionAdapter.upDateList(optionAnswers);
                     isSink = true;
                 }
                 break;

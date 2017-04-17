@@ -78,14 +78,11 @@ public class PracticeActivity extends AppCompatActivity implements View.OnClickL
     private List<Fragment> fragments = new ArrayList<>();
     private List<Fragment> getFragment() {
 
-        for (int i = 0; i < 4; i++) {
-            if (i < 2) {
+        for (int i = 0; i < 2; i++) {
+            if (i == 0) {
                 SingleChooseFragment singleChooseFragment = new SingleChooseFragment();
                 fragments.add(singleChooseFragment);
-            } else if (i==2){
-                BlankFragment blankFragment = new BlankFragment();
-                fragments.add(blankFragment);
-            } else if (i == 3) {
+            } else if (i == 1) {
                 ListenSortFragment listenSortFragment = new ListenSortFragment();
                 fragments.add(listenSortFragment);
             }
