@@ -4,6 +4,7 @@ package com.topicdemo.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,9 +177,27 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
 //                return;
 //            }
 //            optionAdapter.setFirst(false);
-            optionAnswers.get(position).setClick(true);
-
+            //            if (!optionAdapter.isFirst()) {//不是第一次点击
+            Log.d(TAG, "不是第一次点击");
+            for (int i = 0; i < optionAnswers.size(); i++) {
+                if (i == position) {
+                    optionAnswers.get(i).setClick(true);
+                } else {
+                    optionAnswers.get(i).setClick(false);
+                }
+            }
             optionAdapter.upDateList(optionAnswers);
+            //            }
+            String text = "this is a text, 这是一个文本";
+            Log.d(TAG, "文本长度==>" + text.length());
+            SpannableString ss = new SpannableString(text);
+
+            //                 else {//第一次点击
+            //                Log.d(TAG, "第一次点击");
+            //                optionAnswers.get(position).setClick(true);
+            //                optionAdapter.setFirst(false);
+            //                optionAdapter.upDateList(optionAnswers);
+            //            }
 
         }
     };
@@ -286,7 +305,6 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
             OptionAnswer optionAnswer = mDatas.get(position);
             if (optionAnswer.isClick()) {
                 holder.tvOption.setBackgroundResource(R.drawable.btn_aqua_round_10);
-                optionAnswer.setClick(false);
             } else {
                 holder.tvOption.setBackgroundResource(R.drawable.btn_white_round_10);
             }
