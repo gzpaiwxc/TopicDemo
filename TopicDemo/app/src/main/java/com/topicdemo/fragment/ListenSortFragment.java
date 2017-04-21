@@ -2,10 +2,12 @@ package com.topicdemo.fragment;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -98,7 +100,7 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
         gridViewOptionTab = (GridView) view.findViewById(R.id.grid_option_tab);
         optionTabAdapter = new OptionTabAdapter(this.getActivity(), getOptionTabList());
         gridViewOptionTab.setAdapter(optionTabAdapter);
-
+        gridViewOptionTab.setOnItemClickListener(optionTabListener);
 
         rlPicture = (RelativeLayout) view.findViewById(R.id.rl_pic);
         rlOption = (RelativeLayout) view.findViewById(R.id.rl_option);
@@ -159,6 +161,7 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
         }
     }
 
+
     /**答案选项点击事件*/
     public AdapterView.OnItemClickListener optionAnswerListener= new AdapterView.OnItemClickListener() {
         @Override
@@ -169,40 +172,55 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
                 rlSelectOption.setVisibility(View.VISIBLE);
                 isSink = false;
             }
-//            TextView tv = (TextView) ((ViewGroup) view).getChildAt(1);
-//            for (int i = 0; i < optionAnswers.size(); i++) {
-//                if( i ==position){
-//                    tv.setBackgroundResource(R.drawable.btn_aqua_round_10);
-//                }else {
-//                    tv.setBackgroundResource(R.drawable.btn_white_round_10);
-//                }
-//            }
-            //            if (!optionAdapter.isFirst()) {
-//                return;
-//            }
-//            optionAdapter.setFirst(false);
-            //            if (!optionAdapter.isFirst()) {//不是第一次点击
-            Log.d(TAG, "不是第一次点击");
-            for (int i = 0; i < optionAnswers.size(); i++) {
-                if (i == position) {
-                    optionAnswers.get(i).setClick(true);
-                } else {
-                    optionAnswers.get(i).setClick(false);
+                for (int i = 0; i < optionAnswers.size(); i++) {
+                    if (i == position) {
+                        optionAnswers.get(i).setClick(true);
+                    } else {
+                        optionAnswers.get(i).setClick(false);
+                    }
+                }
+                optionAdapter.upDateList(optionAnswers);
+
+        }
+    };
+
+    /**选项框点击事件*/
+    public AdapterView.OnItemClickListener optionTabListener= new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            ToastUtils.showToast(getActivity(),"position="+position);
+            OptionTab optionTab = optionTabs.get(position);
+            if (optionTab.isClick) {
+                optionTab.isClick = false;
+                Log.d(TAG, "isClick=true");
+            } else {
+                Log.d(TAG, "isClick=false");
+                for (int i=0;i<optionTabs.size();i++) {
+                    if (i == position) {
+                        optionTabs.get(i).isClick = true;
+                    }
                 }
             }
-            optionAdapter.upDateList(optionAnswers);
-            //            }
-            String text = "this is a text, 这是一个文本";
-            Log.d(TAG, "文本长度==>" + text.length());
-            SpannableString ss = new SpannableString(text);
+            optionTabAdapter.upDateList(optionTabs);
 
-            //                 else {//第一次点击
-            //                Log.d(TAG, "第一次点击");
-            //                optionAnswers.get(position).setClick(true);
-            //                optionAdapter.setFirst(false);
-            //                optionAdapter.upDateList(optionAnswers);
-            //            }
-
+//            for (int i = 0; i < optionTabs.size(); i++) {
+//                if (position == i) {
+//                    optionTab.isClick = true;
+//                    optionTabAdapter.setFirst(false);
+//                } else {
+//                    optionTabAdapter.setFirst(true);
+//                }
+//                if (optionAnswers.get(i).isClick() ) {
+////                    optionTab.isClick = false;
+//                    optionAnswers.get(i).setOptionAnswer(letterOptions[position]);
+//                    optionAdapter.upDateList(optionAnswers);
+//                }
+////                else if (optionAnswers.get(i).isClick() && !optionTabAdapter.isFirst()) {//不是第一次点击选项，将答案从框里删掉
+////                    optionAnswers.get(i).setOptionAnswer("");
+////                    optionAdapter.upDateList(optionAnswers);
+////                }
+//            }
+//                optionTabAdapter.upDateList(optionTabs);
         }
     };
 
@@ -312,8 +330,10 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
             } else {
                 holder.tvOption.setBackgroundResource(R.drawable.btn_white_round_10);
             }
-//            holder.tvOption.setText(mDatas.get(position));
-
+            holder.tvOption.setText(mDatas.get(position).getOptionAnswer());
+            if (holder.tvOption.getText().length() != 0) {
+                holder.tvOption.setBackgroundResource(R.drawable.btn_blue_round_10);
+            }
             return convertView;
         }
 
@@ -343,9 +363,19 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
         private List<OptionTab> mDatas;
         private Context mContext;
 
+        private boolean isFirst=true;
+
         public OptionTabAdapter(Context context, List<OptionTab> datas) {
             this.mContext = context;
             this.mDatas = datas;
+        }
+
+        public boolean isFirst() {
+            return isFirst;
+        }
+
+        public void setFirst(boolean first) {
+            isFirst = first;
         }
 
         @Override
@@ -373,10 +403,24 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.tvOptionTab.setText(mDatas.get(position).option);
+            OptionTab optionTab = mDatas.get(position);
+            holder.tvOptionTab.setText(optionTab.option);
+            if (optionTab.isClick) {
+                holder.tvOptionTab.setTextColor(Color.WHITE);
+                holder.tvOptionTab.setBackgroundResource(R.drawable.circle_blue);
+            } else if (!optionTab.isClick) {
+                holder.tvOptionTab.setTextColor(convertView.getResources().getColor(R.color.bg_blue_color));
+                holder.tvOptionTab.setBackgroundResource(R.drawable.circle_rim_blue);
+            }
 
             return convertView;
         }
+
+        public void upDateList(List<OptionTab> optionTabs) {
+            this.mDatas = optionTabs;
+            notifyDataSetChanged();
+        }
+
 
         private class ViewHolder {
             private TextView tvOptionTab;

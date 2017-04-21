@@ -26,6 +26,9 @@
             android:id="@+id/tv_option"
             android:layout_width="60dp"
             android:layout_height="29dp"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:textColor="@color/white"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@id/num_option"
             android:background="@drawable/btn_white_round_10"/>
