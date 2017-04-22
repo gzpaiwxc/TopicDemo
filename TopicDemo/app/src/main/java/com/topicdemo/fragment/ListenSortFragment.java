@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -128,6 +129,7 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
         for (int i=0;i<4;i++) {
             OptionAnswer optionAnswer = new OptionAnswer();
             optionAnswer.setNumOption(numOptions[i]);
+            optionAnswer.setOptionAnswer("");
             optionAnswers.add(optionAnswer);
         }
         return optionAnswers;
@@ -184,50 +186,50 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
         }
     };
 
+    private List<Integer> optionClicks = new ArrayList<>();
     /**选项框点击事件*/
     public AdapterView.OnItemClickListener optionTabListener= new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             ToastUtils.showToast(getActivity(),"position="+position);
             OptionTab optionTab = optionTabs.get(position);
-            if (optionTab.isClick) {
-                optionTab.isClick = false;
+            if (optionTab.isClick) {//当选项框的选项未选中时
                 Log.d(TAG, "isClick=true");
-            } else {
+                for (int i=0;i<optionTabs.size();i++) {
+                    if (optionAnswers.get(i).isClick()&&optionAnswers.get(i).getOptionAnswer().length()!=0) {//答案框被选中并且答案框里已填入答案
+                        if (TextUtils.equals(optionTab.option, optionAnswers.get(i).getOptionAnswer())) {//答案框里的答案与所点击的选项框的答案是否一致，一致的话就清掉答案框里的内容
+                            optionAnswers.get(i).setOptionAnswer("");
+                            optionTab.isClick = false;//选项框取消选中
+                        }}
+//                    } else if (optionAnswers.get(i).isClick() && optionAnswers.get(i).getOptionAnswer().length() == 0) {//
+//                        Log.d(TAG, "啥时候走了这一步？");
+//                        optionAnswers.get(i).setOptionAnswer("");
+//                        optionTab.isClick = true;
+//                    }
+                }
+            } else {//当选项框的选项选中时
                 Log.d(TAG, "isClick=false");
                 for (int i=0;i<optionTabs.size();i++) {
-                    if (i == position) {
-                        optionTabs.get(i).isClick = true;
+                    if (optionAnswers.get(i).isClick()&&optionAnswers.get(i).getOptionAnswer().length()==0) {//当答案框被选中并且答案框里没有填入答案时
+                        optionTab.isClick = true;//选项框的选项被选中
+                        optionAnswers.get(i).setOptionAnswer(letterOptions[position]);//将选项框的答案填入答案框
+                        if (i < optionTabs.size()-1) {//填完一个答案后下一个答案框被选中
+                            optionAnswers.get(i).setClick(false);
+                            optionAnswers.get(i+1).setClick(true);
+                            break;
+                        }
+//                        if (TextUtils.equals(optionAnswers.get(i).getOptionAnswer(), optionTab.option)) {
+//                            optionTabs.get(i).isClick = false;
+//                        }
                     }
                 }
             }
+            optionAdapter.upDateList(optionAnswers);
             optionTabAdapter.upDateList(optionTabs);
 
-//            for (int i = 0; i < optionTabs.size(); i++) {
-//                if (position == i) {
-//                    optionTab.isClick = true;
-//                    optionTabAdapter.setFirst(false);
-//                } else {
-//                    optionTabAdapter.setFirst(true);
-//                }
-//                if (optionAnswers.get(i).isClick() ) {
-////                    optionTab.isClick = false;
-//                    optionAnswers.get(i).setOptionAnswer(letterOptions[position]);
-//                    optionAdapter.upDateList(optionAnswers);
-//                }
-////                else if (optionAnswers.get(i).isClick() && !optionTabAdapter.isFirst()) {//不是第一次点击选项，将答案从框里删掉
-////                    optionAnswers.get(i).setOptionAnswer("");
-////                    optionAdapter.upDateList(optionAnswers);
-////                }
-//            }
-//                optionTabAdapter.upDateList(optionTabs);
         }
     };
 
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//        ToastUtils.showToast(this.getActivity(), "position="+position);
-//    }
 
     public static class PictureGridAdapter extends BaseAdapter {
         private Context mContext;
@@ -331,7 +333,7 @@ public class ListenSortFragment extends Fragment implements View.OnClickListener
                 holder.tvOption.setBackgroundResource(R.drawable.btn_white_round_10);
             }
             holder.tvOption.setText(mDatas.get(position).getOptionAnswer());
-            if (holder.tvOption.getText().length() != 0) {
+            if (holder.tvOption.getText().length() != 0 && !mDatas.get(position).isClick()) {
                 holder.tvOption.setBackgroundResource(R.drawable.btn_blue_round_10);
             }
             return convertView;
